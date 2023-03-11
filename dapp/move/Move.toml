@@ -1,0 +1,9 @@
+[package]
+name = 'summaraize'
+version = '1.0.0'
+[dependencies.AptosFramework]
+git = 'https://github.com/aptos-labs/aptos-core.git'
+rev = 'main'
+subdir = 'aptos-move/framework/aptos-framework'
+[addresses]
+summaraize_addr='0xcafcfe635624608a7c1cc84ac1d71a17ffcfd45104910b6a89ad4958e1bc9854'

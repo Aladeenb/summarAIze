@@ -1,0 +1,28 @@
+---
+compiled_package_info:
+  package_name: summaraize
+  address_alias_instantiation:
+    Extensions: "0000000000000000000000000000000000000000000000000000000000000001"
+    aptos_framework: "0000000000000000000000000000000000000000000000000000000000000001"
+    aptos_std: "0000000000000000000000000000000000000000000000000000000000000001"
+    aptos_token: "0000000000000000000000000000000000000000000000000000000000000003"
+    core_resources: 000000000000000000000000000000000000000000000000000000000a550c18
+    std: "0000000000000000000000000000000000000000000000000000000000000001"
+    summaraize_addr: cafcfe635624608a7c1cc84ac1d71a17ffcfd45104910b6a89ad4958e1bc9854
+    vm_reserved: "0000000000000000000000000000000000000000000000000000000000000000"
+  source_digest: 949C3BA9E9902ECD34DA2D218B7C763EF65CC6AA4339B4AC58BD2E29741D6607
+  build_flags:
+    dev_mode: false
+    test_mode: false
+    generate_docs: false
+    generate_abis: false
+    install_dir: ~
+    force_recompilation: false
+    additional_named_addresses: {}
+    architecture: ~
+    fetch_deps_only: false
+    skip_fetch_latest_git_deps: false
+dependencies:
+  - AptosFramework
+  - AptosStdlib
+  - MoveStdlib
