@@ -2,10 +2,13 @@
 
 module summaraize_addr::summaraize {
     use aptos_framework::event;
-    use std::string::{Self, String}; // already have it, need to modify
+    use std::string::String; // already have it, need to modify
     use std::signer;
     use aptos_std::table::{Self, Table}; // This one we already have, need to modify it
     use aptos_framework::account;
+
+    #[test_only]
+    use std::string;
 
     struct SummaryList has key {
         summaries: Table<u64, Summary>,
@@ -103,7 +106,7 @@ module summaraize_addr::summaraize {
             string::utf8(b"output here"),
             );
         let summary_count = event::counter(&borrow_global<SummaryList>(signer::address_of(&admin)).set_summary_event);
-        assert!(summary_count = 1, 4);
+        assert!(summary_count == 1, 4);
         let summary_list = borrow_global<SummaryList>(signer::address_of(&admin));
         assert!(summary_list.summary_counter == 1, 5);
         let summary_record = table::borrow(&summary_list.summaries, summary_list.summary_counter);
@@ -115,11 +118,11 @@ module summaraize_addr::summaraize {
         assert!(summary_record.address == signer::address_of(&admin), 9);
 
         // update summary as approved
-        complete_summary(&admin, 1);
+        approve_summary(&admin, 1);
         let summary_list = borrow_global<SummaryList>(signer::address_of(&admin));
         let summary_record = table::borrow(&summary_list.summaries, 1);
         assert!(summary_record.summary_id == 1, 10);
-        assert!(summary_record.completed == true, 11);
+        assert!(summary_record.approved == true, 11);
         assert!(summary_record.title == string::utf8(b"New Summary"), 8);
         assert!(summary_record.input_text == string::utf8(b"input here"), 8);
         assert!(summary_record.output_text == string::utf8(b"output here"), 8);
