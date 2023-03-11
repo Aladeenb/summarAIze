@@ -14,8 +14,13 @@ function Summarize() {
     setInputValue(event.target.value);
   };
 
+
+
   function Summary() {
-    console.log(x)
+    //console.log(x);
+    //console.log("____________");
+    console.log(textPrep(x));
+    const new_x = textPrep(x);
   }
 
 
@@ -30,16 +35,9 @@ function Summarize() {
       <div style={{ margin: '24px 0' }} />
       <input type="text" value={inputValue} onChange={handleInputChange} />
       <p>You typed: {inputValue}</p>
-      <Button >
-        hi
-      </Button>
-
         <Row>
             <Button onClick={Summary} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
                 Summarize
-            </Button>
-            <Button  block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
-                Start
             </Button>
         </Row>
       </Col>
