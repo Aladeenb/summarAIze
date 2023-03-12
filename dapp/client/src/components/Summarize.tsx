@@ -4,10 +4,11 @@ import { Layout, Row, Col, Button, Input } from "antd";
 import { useNavigate } from 'react-router-dom';
 import nlp from 'compromise'
 
+
 const { TextArea } = Input;
 
 function Summarize() {
-
+  const [text, setText] = useState('Hwllo');
   const [inputValue, setInputValue] = useState<string>('');
   const x = inputValue;
 
@@ -15,20 +16,58 @@ function Summarize() {
     setInputValue(event.target.value);
   };
 
-  function removeAdjectives(text: string): string {
+    function textTrim(text: string): string {
+      const par_pattern = /\([^()]*\)/g;
+      const trimmedText = text.replace(par_pattern, '')
+                              .replace(/\s*([.,;:!?"])/g, "$1")
+                              .replace(/\t/g, " ")
+                              .replace(/\n/g, " ")
+                              .replace(/\n\n/g, " ")
+                              .replace(/  /g, " ")
+                              .replace(/"/g, "");
+      return trimmedText;
+    }
 
-    return text
+  function removeAdjectives(text: string) {
+    const doc = nlp(text);
+    doc.delete(doc.adjectives());
+    const no_text_adj = doc.out('text');
+    return no_text_adj
   }
 
-  function Summary() {
-    console.log(x);
-    console.log("____________");
-    console.log(removeAdjectives(x));
-    const new_x = removeAdjectives(x);
+  function textPrep(text: string) {
+    const text_1 = textTrim(text);
+    const text_2 = removeAdjectives(text_1);
+    return text_2
   }
+  
+  const cleanText = textPrep(x);
+  
+  const str = "To simplfy, "
+  const gpt_prompt = cleanText + "\n" + str;
 
+//  const { Configuration, OpenAIApi } = require("openai");
+//
+//  const configuration = new Configuration({
+//    apiKey: process.env.OPENAI_API_KEY,
+//  });
+//  const openai = new OpenAIApi(configuration);
+//
+//  const response = openai.createCompletion({
+//  model: "text-davinci-003",
+//  prompt: gpt_prompt,
+//  temperature: 0.9,
+//  max_tokens: 300,
+//  top_p: 1,
+//  frequency_penalty: 0,
+//  presence_penalty: 0,
+//});
 
+  const handleButtonClick = () => {
+    setText(cleanText);
+  }
   return (
+
     <div>
       <header>
         <p>Summarize components</p>
@@ -38,11 +77,12 @@ function Summarize() {
       <Col>
       <div style={{ margin: '24px 0' }} />
       <input type="text" value={inputValue} onChange={handleInputChange} />
-      <p>You typed: {inputValue}</p>
+
         <Row>
-            <Button onClick={Summary} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
+            <Button onClick={handleButtonClick} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
                 Summarize
             </Button>
+            <p>{text}</p>
             <Button  block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
                 Approve
             </Button>
