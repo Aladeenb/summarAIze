@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layout, Row, Col, Button, Input } from "antd";
 import { useNavigate } from 'react-router-dom';
 import nlp from 'compromise';
-import { GptCaller } from "./sdk/gptCaller.sdk.ts";
+import { GptCaller } from "../sdk/gptCaller.sdk.js";
 import "./App.css";
 
 const { TextArea } = Input;
