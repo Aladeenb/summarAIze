@@ -1,0 +1,12 @@
+name: summarAIze
+region: us-east-1
+cloudProvider: aws
+sdk:
+  language: ts
+  options:
+    runtime: browser
+  path: ./../client/src/sdk
+classes:
+  - path: gptCaller.js
+    type: jsonrpc
+    methods: []
