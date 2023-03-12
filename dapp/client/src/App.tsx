@@ -20,6 +20,7 @@ function App() {
   const { account, signAndSubmitTransaction } = useWallet();
   const [accountHasList, setAccountHasList] = useState<boolean>(false);
 
+
   const fetchList = async () => {
     if (!account) return [];
     try {
@@ -41,7 +42,8 @@ function App() {
       type: "entry_function_payload",
       function: `${moduleAddress}::summaraize::create_list`,
       type_arguments: [],
-      arguments: [],
+      arguments: [
+      ],
     };
     try {
       // sign and submit transaction to chain
@@ -55,6 +57,33 @@ function App() {
       setTransactionInProgress(false);
     }
   };
+
+  const addSummary = async () => {
+    if (!account) return [];
+    setTransactionInProgress(true);
+    // build a transaction payload to be submited
+    const payload = {
+      type: "entry_function_payload",
+      function: `${moduleAddress}::summaraize::create_summary`,
+      type_arguments: [],
+      arguments: [
+        'test',
+        'test',
+        'test'
+      ],
+    };
+    try {
+      // sign and submit transaction to chain
+      const response = await signAndSubmitTransaction(payload);
+      // wait for transaction
+      await client.waitForTransaction(response.hash);
+      setAccountHasList(true);
+    } catch (error: any) {
+      setAccountHasList(false);
+    } finally {
+      setTransactionInProgress(false);
+    }
+  }
 
   useEffect(() => {
     fetchList();
@@ -88,6 +117,9 @@ function App() {
                 </Router>
                 <Button onClick={addNewList} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
                   Add new list
+                </Button>
+                <Button onClick={addSummary} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
+                  add summary
                 </Button>
           </Col>
         </Row>
