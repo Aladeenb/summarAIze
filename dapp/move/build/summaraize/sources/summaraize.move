@@ -16,7 +16,7 @@ module summaraize_addr::summaraize {
         summary_counter: u64
     } 
 
-    struct Summary has store, drop, copy {
+    struct Summary has key, store, drop, copy {
         summary_id: u64,
         address: address,
         title: String,

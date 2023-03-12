@@ -2,7 +2,6 @@ import React, { useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Row, Col, Button, Input } from "antd";
 import { useNavigate } from 'react-router-dom';
-import nlp from 'compromise'
 
 const { TextArea } = Input;
 
@@ -42,9 +41,6 @@ function Summarize() {
         <Row>
             <Button onClick={Summary} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
                 Summarize
-            </Button>
-            <Button  block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
-                Approve
             </Button>
         </Row>
       </Col>

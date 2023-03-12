@@ -13,22 +13,46 @@ import History from "./components/History";
 
 const NODE_URL = "https://fullnode.devnet.aptoslabs.com";
 const client = new AptosClient(NODE_URL);
+const moduleAddress = "0x6507124baa17047bf6988f03188fa7fd8c6d508c1007e7085882a8544a4a6b76";
 
 function App() {
-  const { account } = useWallet();
+  const [transactionInProgress, setTransactionInProgress] = useState<boolean>(false);
+  const { account, signAndSubmitTransaction } = useWallet();
   const [accountHasList, setAccountHasList] = useState<boolean>(false);
+
   const fetchList = async () => {
     if (!account) return [];
-    // change this to be your module account address
-    const moduleAddress = "0xcbddf398841353776903dbab2fdaefc54f181d07e114ae818b1a67af28d1b018";
     try {
       const TodoListResource = await client.getAccountResource(
         account.address,
-        `${moduleAddress}::todolist::TodoList`
+        `${moduleAddress}::summaraize::Summaraize`
       );
       setAccountHasList(true);
     } catch (e: any) {
       setAccountHasList(false);
+    }
+  };
+
+  const addNewList = async () => {
+    if (!account) return [];
+    setTransactionInProgress(true);
+    // build a transaction payload to be submited
+    const payload = {
+      type: "entry_function_payload",
+      function: `${moduleAddress}::summaraize::create_list`,
+      type_arguments: [],
+      arguments: [],
+    };
+    try {
+      // sign and submit transaction to chain
+      const response = await signAndSubmitTransaction(payload);
+      // wait for transaction
+      await client.waitForTransaction(response.hash);
+      setAccountHasList(true);
+    } catch (error: any) {
+      setAccountHasList(false);
+    } finally {
+      setTransactionInProgress(false);
     }
   };
 
@@ -52,19 +76,22 @@ function App() {
           </Col>
         </Row>
       </Layout>
-          {!accountHasList && (
-      <Row gutter={[0, 32]} style={{ marginTop: "2rem" }}>
-        <Col span={8} offset={8}>
-          <Router>
-                <Routes>
-                  <Route path="/summarize" element={<Summarize />}/>
-                  <Route path="/history" element={<History />}/>
-                  <Route path="/" element={<Main/>}/>
-                </Routes>
-              </Router>
-        </Col>
-      </Row>
-    )}
+        {!accountHasList && (
+        <Row gutter={[0, 32]} style={{ marginTop: "2rem" }}>
+          <Col span={8} offset={8}>
+            <Router>
+                  <Routes>
+                    <Route path="/summarize" element={<Summarize />}/>
+                    <Route path="/history" element={<History />}/>
+                    <Route path="/" element={<Main/>}/>
+                  </Routes>
+                </Router>
+                <Button onClick={addNewList} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
+                  Add new list
+                </Button>
+          </Col>
+        </Row>
+        )}
     </>
   );
 }
