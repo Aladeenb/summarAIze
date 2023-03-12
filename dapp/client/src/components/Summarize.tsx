@@ -2,10 +2,16 @@ import React, { useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Row, Col, Button, Input } from "antd";
 import { useNavigate } from 'react-router-dom';
-import nlp from 'compromise'
-
+import nlp from 'compromise';
+import { GptCaller } from "./sdk/gptCaller.sdk.ts";
+import "./App.css";
 
 const { TextArea } = Input;
+
+type MyStuff = {
+  text: string,
+  isUser: boolean,
+}
 
 function Summarize() {
   const [text, setText] = useState('Hwllo');
@@ -45,6 +51,35 @@ function Summarize() {
   
   const str = "To simplfy, "
   const gpt_prompt = cleanText + "\n" + str;
+
+  // each mesage format: {text: "message", isUser: true/false}
+const [messages, setMessages] = useState<MyStuff[]>([]);
+const [requestText, setRequestText] = useState("");
+const [isRequesting, setIsRequesting] = useState(false);
+
+function sendRequest(e: React.FormEvent<HTMLFormElement>): void {
+  e.preventDefault();
+  setIsRequesting(true);
+  GptCaller.askChatGPT(requestText)
+    .then((response: string) => {
+      setMessages([
+        {
+          text: requestText,
+          isUser: false
+        },
+        {
+          text: response,
+          isUser: false
+        }
+      ]);
+      setRequestText("");
+      setIsRequesting(false);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      setIsRequesting(false);
+    });
+}
 
 //  const { Configuration, OpenAIApi } = require("openai");
 //
