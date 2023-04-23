@@ -26,7 +26,7 @@ function App() {
     try {
       const TodoListResource = await client.getAccountResource(
         account.address,
-        `${moduleAddress}::summaraize::Summaraize`
+        `${moduleAddress}::summaraize::summaryList`
       );
       setAccountHasList(true);
     } catch (e: any) {
@@ -42,8 +42,7 @@ function App() {
       type: "entry_function_payload",
       function: `${moduleAddress}::summaraize::create_list`,
       type_arguments: [],
-      arguments: [
-      ],
+      arguments: [],
     };
     try {
       // sign and submit transaction to chain
@@ -67,11 +66,22 @@ function App() {
       function: `${moduleAddress}::summaraize::create_summary`,
       type_arguments: [],
       arguments: [
-        '',
-        '',
-        ''
+        "hi",
+        "hi",
+        "hi"
       ],
     };
+    try {
+      // sign and submit transaction to chain
+      const response = await signAndSubmitTransaction(payload);
+      // wait for transaction
+      await client.waitForTransaction(response.hash);
+      setAccountHasList(true);
+    } catch (error: any) {
+      setAccountHasList(false);
+    } finally {
+      setTransactionInProgress(false);
+    }
   }
 
   useEffect(() => {
@@ -104,11 +114,8 @@ function App() {
                     <Route path="/" element={<Main/>}/>
                   </Routes>
                 </Router>
-                <Button onClick={addNewList} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
-                  Add new list
-                </Button>
-                <Button onClick={addNewList} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
-                  Approve
+                <Button onClick={addSummary} block type="primary" style={{ height: "40px", backgroundColor: "#3f67ff" }}>
+                  Create a new summary
                 </Button>
           </Col>
         </Row>

@@ -2,7 +2,7 @@
 
 ## Contract logic
 
-1. An account creates a new **summary list** 
+1. An account creates a new **summary list**
 2. An account inputs some text to the text field
    1. Whenever someone creates a new summary, emit a `summary_created` event
 3. An account approves the output by hitting `approve`
@@ -21,3 +21,8 @@
   - Approved - a boolean that marks whether the summary is approved
   - Discard - a boolean that deletes the summary if true.
   > Check if Discard is needed
+
+## notes
+
+- creating a list of summaries is irrelevant. User have to start/create a summary and then the list will automaticatly be generated.
+=> this involves changing the 'create_summary'.
